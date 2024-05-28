@@ -7,10 +7,11 @@ from app.config import load_configuration, setup_logging
 
 
 @asynccontextmanager
-async def liftspan(app: FastAPI):
+async def lifespan(app: FastAPI):
     try:
         logging.info("app startup")
-        app.state.posgtres_manager = PostgresDB()
+        app.state.postgres_manager = PostgresDB()
+        app.state.postgres_manager.initialize_db_structure()
 
         yield
     except Exception as e:
@@ -22,7 +23,5 @@ def create_app() -> FastAPI:
     app = FastAPI()
     load_configuration(app)
     setup_logging()
-
-    app.db = PostgresDB()
-
+    app.router.lifespan_context = lifespan
     return app

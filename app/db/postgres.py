@@ -27,10 +27,45 @@ class PostgresDB(Singleton):
         self.conn.commit()
 
 
-def initialize_db_structure(db):
-    pass
+    def initialize_db_structure(self):
+        # Define the structure of the tables
+        tables = {
+            "users": {
+                "id": "SERIAL PRIMARY KEY",
+                "email": "VARCHAR(255)",
+                "username": "VARCHAR(255)",
+                "password": "VARCHAR(255)"
+            },
+            "boards": {
+                "board_id": "SERIAL PRIMARY KEY",
+                "name": "VARCHAR(255)",
+                "icon": "VARCHAR(255)",
+                "visibility": "BOOLEAN",
+                "user_id": "INTEGER REFERENCES users(id)"
+            },
+            "projects": {
+                "project_id": "SERIAL PRIMARY KEY",
+                "name": "VARCHAR(255)",
+                "visibility": "BOOLEAN",
+                "board_id": "INTEGER REFERENCES boards(board_id)"
+            },
+            "tasks": {
+                "id": "SERIAL PRIMARY KEY",
+                "name": "VARCHAR(255)",
+                "status": "VARCHAR(255)",
+                "description": "TEXT",
+                "start_time": "TIMESTAMP",
+                "attachment": "TEXT",
+                "blocking_task_id": "INTEGER REFERENCES tasks(id)",
+                "project_id": "INTEGER REFERENCES projects(project_id)"
+            }
+        }
+
+        # Create the tables
+        for table_name, columns in tables.items():
+            self.create_table(table_name, columns)
 
 
 if __name__ == "__main__":
     db = PostgresDB()
-    initialize_db_structure(db)
+    db.initialize_db_structure()
