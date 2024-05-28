@@ -26,7 +26,6 @@ class PostgresDB(Singleton):
             self.cursor.execute(query, tuple(data.values()))
         self.conn.commit()
 
-
     def initialize_db_structure(self):
         # Define the structure of the tables
         tables = {
@@ -34,20 +33,20 @@ class PostgresDB(Singleton):
                 "id": "SERIAL PRIMARY KEY",
                 "email": "VARCHAR(255)",
                 "username": "VARCHAR(255)",
-                "password": "VARCHAR(255)"
+                "password": "VARCHAR(255)",
             },
             "boards": {
                 "board_id": "SERIAL PRIMARY KEY",
                 "name": "VARCHAR(255)",
                 "icon": "VARCHAR(255)",
                 "visibility": "BOOLEAN",
-                "user_id": "INTEGER REFERENCES users(id)"
+                "user_id": "INTEGER REFERENCES users(id)",
             },
             "projects": {
                 "project_id": "SERIAL PRIMARY KEY",
                 "name": "VARCHAR(255)",
                 "visibility": "BOOLEAN",
-                "board_id": "INTEGER REFERENCES boards(board_id)"
+                "board_id": "INTEGER REFERENCES boards(board_id)",
             },
             "tasks": {
                 "id": "SERIAL PRIMARY KEY",
@@ -57,8 +56,8 @@ class PostgresDB(Singleton):
                 "start_time": "TIMESTAMP",
                 "attachment": "TEXT",
                 "blocking_task_id": "INTEGER REFERENCES tasks(id)",
-                "project_id": "INTEGER REFERENCES projects(project_id)"
-            }
+                "project_id": "INTEGER REFERENCES projects(project_id)",
+            },
         }
 
         # Create the tables
