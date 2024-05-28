@@ -8,5 +8,12 @@
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal"
         },
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
     ]
 }
