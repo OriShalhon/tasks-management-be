@@ -5,6 +5,7 @@ from app.db.postgres import PostgresDB
 from contextlib import asynccontextmanager
 from app.config import load_configuration, setup_logging
 
+
 @asynccontextmanager
 async def liftspan(app: FastAPI):
     try:
@@ -15,6 +16,7 @@ async def liftspan(app: FastAPI):
     except Exception as e:
         logging.error(e)
         raise e
+
 
 def create_app() -> FastAPI:
     app = FastAPI()

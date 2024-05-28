@@ -4,9 +4,11 @@ import os
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
+
 def load_configuration(app: FastAPI):
     load_dotenv()
     # this will be used to setup the configuration and state of the application
+
 
 def setup_logging():
     log_file = os.path.join(os.getcwd(), "app.log")
