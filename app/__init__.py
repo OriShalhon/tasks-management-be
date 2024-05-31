@@ -1,4 +1,5 @@
 import logging
+import os 
 
 from fastapi import FastAPI
 from app.db.postgres import PostgresDB
@@ -11,7 +12,6 @@ async def lifespan(app: FastAPI):
     try:
         logging.info("app startup")
         app.state.postgres_manager = PostgresDB()
-        app.state.postgres_manager.initialize_db_structure()
 
         yield
     except Exception as e:

@@ -1,6 +1,6 @@
 import os
 import psycopg2
-
+import json
 from app.utils.singleton import Singleton
 
 
@@ -30,7 +30,7 @@ class PostgresDB(Singleton):
         # Define the structure of the tables
         tables = {
             "users": {
-                "id": "SERIAL PRIMARY KEY",
+                "u_id": "SERIAL PRIMARY KEY",
                 "email": "VARCHAR(255)",
                 "username": "VARCHAR(255)",
                 "password": "VARCHAR(255)",
@@ -40,7 +40,7 @@ class PostgresDB(Singleton):
                 "name": "VARCHAR(255)",
                 "icon": "VARCHAR(255)",
                 "visibility": "BOOLEAN",
-                "user_id": "INTEGER REFERENCES users(id)",
+                "user_id": "INTEGER REFERENCES users(u_id)",
             },
             "projects": {
                 "project_id": "SERIAL PRIMARY KEY",
@@ -49,13 +49,13 @@ class PostgresDB(Singleton):
                 "board_id": "INTEGER REFERENCES boards(board_id)",
             },
             "tasks": {
-                "id": "SERIAL PRIMARY KEY",
+                "task_id": "SERIAL PRIMARY KEY",
                 "name": "VARCHAR(255)",
                 "status": "VARCHAR(255)",
                 "description": "TEXT",
                 "start_time": "TIMESTAMP",
                 "attachment": "TEXT",
-                "blocking_task_id": "INTEGER REFERENCES tasks(id)",
+                "blocking_task_id": "INTEGER REFERENCES tasks(task_id)",
                 "project_id": "INTEGER REFERENCES projects(project_id)",
             },
         }
@@ -64,7 +64,39 @@ class PostgresDB(Singleton):
         for table_name, columns in tables.items():
             self.create_table(table_name, columns)
 
+    def populate_db_from_file(self, data_file: str ) -> None:
+        # Load data from JSON file
+        with open(data_file, 'r') as f:
+            data = json.load(f)
 
-if __name__ == "__main__":
-    db = PostgresDB()
-    db.initialize_db_structure()
+        # Iterate over boards
+        for board in data['boards']:
+            # Insert board
+            self.write_data('boards', [{
+                'board_id' : board['id'],
+                'name': board['boardName'],
+                'icon': board['icon'],
+                'visibility': board['isVisible']
+            }])
+
+            # Iterate over projects
+            for project in board['projects']:
+                # Insert project
+                self.write_data('projects', [{
+                    'project_id': project['id'],
+                    'name': project['projectName'],
+                    'visibility': project['isVisible'],
+                    'board_id': board['id']
+                }])
+
+                # Iterate over tasks
+                for task in project['tasks']:
+                    # Insert task
+                    self.write_data('tasks', [{
+                        'task_id': task['id'],
+                        'name': task['headline'],
+                        'status': task['status'],
+                        'description': task['description'],
+                        'project_id': project['id'],
+                        'blocking_task_id': task['blocking_task_id'] if 'blocking_task_id' in task else None
+                    }])
