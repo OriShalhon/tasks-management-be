@@ -64,39 +64,56 @@ class PostgresDB(Singleton):
         for table_name, columns in tables.items():
             self.create_table(table_name, columns)
 
-    def populate_db_from_file(self, data_file: str ) -> None:
+    def populate_db_from_file(self, data_file: str) -> None:
         # Load data from JSON file
-        with open(data_file, 'r') as f:
+        with open(data_file, "r") as f:
             data = json.load(f)
 
         # Iterate over boards
-        for board in data['boards']:
+        for board in data["boards"]:
             # Insert board
-            self.write_data('boards', [{
-                'board_id' : board['id'],
-                'name': board['boardName'],
-                'icon': board['icon'],
-                'visibility': board['isVisible']
-            }])
+            self.write_data(
+                "boards",
+                [
+                    {
+                        "board_id": board["id"],
+                        "name": board["boardName"],
+                        "icon": board["icon"],
+                        "visibility": board["isVisible"],
+                    }
+                ],
+            )
 
             # Iterate over projects
-            for project in board['projects']:
+            for project in board["projects"]:
                 # Insert project
-                self.write_data('projects', [{
-                    'project_id': project['id'],
-                    'name': project['projectName'],
-                    'visibility': project['isVisible'],
-                    'board_id': board['id']
-                }])
+                self.write_data(
+                    "projects",
+                    [
+                        {
+                            "project_id": project["id"],
+                            "name": project["projectName"],
+                            "visibility": project["isVisible"],
+                            "board_id": board["id"],
+                        }
+                    ],
+                )
 
                 # Iterate over tasks
-                for task in project['tasks']:
+                for task in project["tasks"]:
                     # Insert task
-                    self.write_data('tasks', [{
-                        'task_id': task['id'],
-                        'name': task['headline'],
-                        'status': task['status'],
-                        'description': task['description'],
-                        'project_id': project['id'],
-                        'blocking_task_id': task['blocking_task_id'] if 'blocking_task_id' in task else None
-                    }])
+                    self.write_data(
+                        "tasks",
+                        [
+                            {
+                                "task_id": task["id"],
+                                "name": task["headline"],
+                                "status": task["status"],
+                                "description": task["description"],
+                                "project_id": project["id"],
+                                "blocking_task_id": task["blocking_task_id"]
+                                if "blocking_task_id" in task
+                                else None,
+                            }
+                        ],
+                    )

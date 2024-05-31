@@ -1,5 +1,8 @@
 {
     "terminal.integrated.env.osx": {
         "PYTHONPATH": "${workspaceFolder}"
-    }
+    },
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
 }

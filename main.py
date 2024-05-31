@@ -8,6 +8,7 @@ app = create_app()
 
 logging.basicConfig(level=logging.INFO)
 
+
 def setup_database(initiate_db: bool = False, populate_data: bool = False) -> None:
     db = PostgresDB()
     data_file = os.path.join(os.getcwd(), "projectTaskInfo.json")
