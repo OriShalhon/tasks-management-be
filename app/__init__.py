@@ -1,10 +1,10 @@
 import logging
-import os 
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from app.db.postgres import PostgresDB
-from contextlib import asynccontextmanager
+
 from app.config import load_configuration, setup_logging
+from app.db.postgres import PostgresDB
 
 
 @asynccontextmanager
