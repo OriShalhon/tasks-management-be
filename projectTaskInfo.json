@@ -1,0 +1,339 @@
+{
+  "boards": [
+    {
+      "id": 1,
+      "boardName": "Board 1",
+      "isVisible": false,
+      "icon": "work",
+      "projects": [
+        {
+          "id": 1,
+          "projectName": "Project Alpha",
+          "isVisible": true,
+          "tasks": [
+            {
+              "id": 101,
+              "headline": "Task Alpha 1",
+              "projectId": 1,
+              "status": 0,
+              "description": "Description of Task Alpha 1",
+              "isExpanded": true
+            },
+            {
+              "id": 102,
+              "headline": "Task Alpha 2",
+              "blocking_task_id": 101,
+              "projectId": 1,
+              "status": 1,
+              "description": "Description of Task Alpha 2",
+              "isExpanded": false
+            },
+            {
+              "id": 103,
+              "headline": "Task Alpha 3",
+              "blocking_task_id": 102,
+              "projectId": 1,
+              "status": 2,
+              "description": "Description of Task Alpha 3",
+              "isExpanded": true
+            },
+            {
+              "id": 104,
+              "headline": "Task Alpha 4",
+              "blocking_task_id": 103,
+              "projectId": 1,
+              "status": 0,
+              "description": "Description of Task Alpha 4",
+              "isExpanded": true
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "projectName": "Project Beta",
+          "isVisible": true,
+          "tasks": [
+            {
+              "id": 201,
+              "headline": "Task Beta 1",
+              "projectId": 2,
+              "status": 2,
+              "description": "Description of Task Beta 1",
+              "isExpanded": false
+            },
+            {
+              "id": 202,
+              "headline": "Task Beta 2",
+              "blocking_task_id": 201,
+              "projectId": 2,
+              "status": 0,
+              "description": "Description of Task Beta 2",
+              "isExpanded": true
+            },
+            {
+              "id": 203,
+              "headline": "Task Beta 3",
+              "blocking_task_id": 202,
+              "projectId": 2,
+              "status": 1,
+              "description": "Description of Task Beta 3",
+              "isExpanded": false
+            },
+            {
+              "id": 204,
+              "headline": "Task Beta 4",
+              "blocking_task_id": 203,
+              "projectId": 2,
+              "status": 0,
+              "description": "Description of Task Beta 4",
+              "isExpanded": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "boardName": "Board 2",
+      "isVisible": false,
+      "icon": "school",
+      "projects": [
+        {
+          "id": 3,
+          "projectName": "Project Gamma",
+          "isVisible": false,
+          "tasks": [
+            {
+              "id": 301,
+              "headline": "Task Gamma 1",
+              "projectId": 3,
+              "status": 0,
+              "description": "Description of Task Gamma 1",
+              "isExpanded": false
+            },
+            {
+              "id": 302,
+              "headline": "Task Gamma 2",
+              "blocking_task_id": 301,
+              "projectId": 3,
+              "status": 2,
+              "description": "Description of Task Gamma 2",
+              "isExpanded": true
+            },
+            {
+              "id": 303,
+              "headline": "Task Gamma 3",
+              "blocking_task_id": 302,
+              "projectId": 3,
+              "status": 1,
+              "description": "Description of Task Gamma 3",
+              "isExpanded": false
+            },
+            {
+              "id": 304,
+              "headline": "Task Gamma 4",
+              "blocking_task_id": 303,
+              "projectId": 3,
+              "status": 0,
+              "description": "Description of Task Gamma 4",
+              "isExpanded": true
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "projectName": "Project Delta",
+          "isVisible": true,
+          "tasks": [
+            {
+              "id": 401,
+              "headline": "Task Delta 1",
+              "projectId": 4,
+              "status": 1,
+              "description": "Description of Task Delta 1",
+              "isExpanded": false
+            },
+            {
+              "id": 402,
+              "headline": "Task Delta 2",
+              "blocking_task_id": 401,
+              "projectId": 4,
+              "status": 0,
+              "description": "Description of Task Delta 2",
+              "isExpanded": true
+            },
+            {
+              "id": 403,
+              "headline": "Task Delta 3",
+              "blocking_task_id": 402,
+              "projectId": 4,
+              "status": 2,
+              "description": "Description of Task Delta 3",
+              "isExpanded": false
+            },
+            {
+              "id": 404,
+              "headline": "Task Delta 4",
+              "blocking_task_id": 403,
+              "projectId": 4,
+              "status": 1,
+              "description": "Description of Task Delta 4",
+              "isExpanded": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "boardName": "Board 3",
+      "isVisible": true,
+      "icon": "home",
+      "projects": [
+        {
+          "id": 5,
+          "projectName": "Project Epsilon",
+          "isVisible": true,
+          "tasks": [
+            {
+              "id": 501,
+              "headline": "Task Epsilon 1",
+              "projectId": 5,
+              "status": 0,
+              "description": "Description of Task Epsilon 1",
+              "isExpanded": true
+            },
+            {
+              "id": 502,
+              "headline": "Task Epsilon 2",
+              "blocking_task_id": 501,
+              "projectId": 5,
+              "status": 1,
+              "description": "Description of Task Epsilon 2",
+              "isExpanded": false
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "projectName": "Project Zeta",
+          "isVisible": true,
+          "tasks": [
+            {
+              "id": 601,
+              "headline": "Task Zeta 1",
+              "projectId": 6,
+              "status": 2,
+              "description": "Description of Task Zeta 1",
+              "isExpanded": false
+            },
+            {
+              "id": 602,
+              "headline": "Task Zeta 2",
+              "blocking_task_id": 601,
+              "projectId": 6,
+              "status": 0,
+              "description": "Description of Task Zeta 2",
+              "isExpanded": true
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "projectName": "Project Eta",
+          "isVisible": true,
+          "tasks": [
+            {
+              "id": 701,
+              "headline": "Task Eta 1",
+              "projectId": 7,
+              "status": 1,
+              "description": "Description of Task Eta 1",
+              "isExpanded": false
+            },
+            {
+              "id": 702,
+              "headline": "Task Eta 2",
+              "blocking_task_id": 701,
+              "projectId": 7,
+              "status": 0,
+              "description": "Description of Task Eta 2",
+              "isExpanded": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dailyPlanner": {
+    "morningTasks": [
+      {
+        "id": 101,
+        "headline": "Task Alpha 1",
+        "timeOfDay": 0,
+        "isDone": false,
+        "parentId": 101
+      },
+      {
+        "id": 201,
+        "headline": "Task Beta 1",
+        "timeOfDay": 0,
+        "isDone": false,
+        "parentId": 201
+      },
+      {
+        "id": 301,
+        "headline": "Task Gamma 1",
+        "timeOfDay": 0,
+        "isDone": true,
+        "parentId": 301
+      }
+    ],
+    "afternoonTasks": [
+      {
+        "id": 102,
+        "headline": "Task Alpha 2",
+        "timeOfDay": 1,
+        "isDone": false,
+        "parentId": 101
+      },
+      {
+        "id": 202,
+        "headline": "Task Beta 2",
+        "timeOfDay": 1,
+        "isDone": false,
+        "parentId": 201
+      },
+      {
+        "id": 302,
+        "headline": "Task Gamma 2",
+        "timeOfDay": 1,
+        "isDone": false,
+        "parentId": 301
+      }
+    ],
+    "eveningTasks": [
+      {
+        "id": 401,
+        "headline": "Task Delta 1",
+        "timeOfDay": 2,
+        "isDone": false,
+        "parentId": 401
+      },
+      {
+        "id": 501,
+        "headline": "Task Epsilon 1",
+        "timeOfDay": 2,
+        "isDone": false,
+        "parentId": 501
+      },
+      {
+        "id": 601,
+        "headline": "Task Zeta 1",
+        "timeOfDay": 2,
+        "isDone": false,
+        "parentId": 601
+      }
+    ]
+  }
+}
