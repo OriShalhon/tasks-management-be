@@ -4,5 +4,8 @@
     },
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
-    },
+    },    
+    "workbench.editorAssociations": {   
+      "*.md": "vscode.markdown.preview.editor",
+  }
 }
