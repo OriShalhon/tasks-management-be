@@ -3,6 +3,7 @@
 This document outlines the architecture of our FastAPI-based application. Our project is structured to promote clarity, scalability, and separation of concerns.
 
 ## Directory Structure
+```
 ├── src/
 │   ├── api/
 │   │   ├── routes/
@@ -42,6 +43,7 @@ This document outlines the architecture of our FastAPI-based application. Our pr
 │   └── services/
 |
 └── pyproject.toml
+```
 
 ## Module Descriptions
 
