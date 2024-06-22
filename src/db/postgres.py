@@ -1,7 +1,7 @@
 import os
 import psycopg2
 import json
-from app.utils.singleton import Singleton
+from src.utils.singleton import Singleton
 
 
 class PostgresDB(Singleton):

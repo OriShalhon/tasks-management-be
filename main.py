@@ -1,8 +1,8 @@
 import logging
 import os
 import uvicorn
-from app.db.postgres import PostgresDB
-from app import create_app
+from src.db.postgres import PostgresDB
+from src import create_app
 
 app = create_app()
 

@@ -3,8 +3,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.config import load_configuration, setup_logging
-from app.db.postgres import PostgresDB
+from src.core.config import load_configuration, setup_logging
+from src.db.postgres import PostgresDB
 
 
 @asynccontextmanager
