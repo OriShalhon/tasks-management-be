@@ -1,7 +1,50 @@
-import os
-import psycopg2
 import json
-from src.utils.singleton import Singleton
+import os
+from typing import Union
+
+import psycopg2
+from fastapi import HTTPException
+
+from ..utils.singleton import Singleton
+
+
+class ValidateQuery():
+    def __init__(self, postgresDB):
+        self.allowed_tables = []
+        self.allowed_columns = {}
+        self.__db = postgresDB
+        self.__setData()
+
+    def __setData(self):
+        query = "SELECT table_name, array_agg(column_name::text) as columns FROM information_schema.columns WHERE table_schema = 'public' GROUP BY table_name"
+        self.__db.cursor.execute(query)
+        result = self.__db.cursor.fetchall()
+        columns = []
+        for row in result:
+            table_name = row[0]
+            columns = row[1]
+            columns.append('*')
+            self.allowed_tables.append(row[0])
+            self.allowed_columns[table_name] = columns
+
+    def validateQueryData(self, table_name: str, columns: Union[str, list[str]], condition=None):
+        # Ensure columns is always a list
+        if isinstance(columns, str):
+            columns = [columns]
+
+        # Validate table name
+        if table_name not in self.allowed_tables:
+            raise HTTPException(status_code=400, detail="Invalid table name")
+
+        # Validate column names
+        if not all(col in self.allowed_columns[table_name] for col in columns):
+            raise HTTPException(status_code=400, detail="Invalid column name")
+
+        # Validate condition if present
+        if condition:
+            # Validate condition column
+            if condition[0] not in self.allowed_columns[table_name]:
+                raise HTTPException(status_code=400, detail="Invalid condition column")
 
 
 class PostgresDB(Singleton):
@@ -9,6 +52,7 @@ class PostgresDB(Singleton):
         connection_string = os.getenv("DATABASE_URL")
         self.conn = psycopg2.connect(connection_string)
         self.cursor = self.conn.cursor()
+        self.__validate = ValidateQuery(self)
 
     def create_table(self, table_name: str, columns: dict) -> None:
         # Create a new table with the given name and columns
@@ -25,6 +69,21 @@ class PostgresDB(Singleton):
             query = f"INSERT INTO {table_name} ({columns_str}) VALUES ({values_str})"
             self.cursor.execute(query, tuple(data.values()))
         self.conn.commit()
+
+    def get_data(self, table_name, columns, condition=None):
+        self.__validate.validateQueryData(table_name, columns, condition)
+        columns_str = ", ".join(columns)
+        query = f"""SELECT {columns_str} FROM {table_name}"""
+        params = None
+
+        if condition:
+            query += f""" WHERE {condition[0]} = %s"""
+            params = (condition[1],)
+
+        self.cursor.execute(query, params)
+
+        result = self.cursor.fetchall()
+        return result
 
     def initialize_db_structure(self):
         # Define the structure of the tables

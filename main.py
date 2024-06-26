@@ -1,8 +1,11 @@
 import logging
 import os
+
 import uvicorn
-from src.db.postgres import PostgresDB
+from fastapi import Response
+
 from src import create_app
+from src.db.postgres import PostgresDB
 
 app = create_app()
 
@@ -17,9 +20,15 @@ def setup_database(initiate_db: bool = False, populate_data: bool = False) -> No
     if populate_data:
         db.populate_db_from_file(data_file)
 
+@app.get("/{table}/{column}/{condition}")
+def get_data(table: str, column: str,  condition: str, response : Response):
+    db = PostgresDB()
+    data = db.get_data(table, '*', [column, condition])
+    return {"data": data}
+
+
 
 if __name__ == "__main__":
-    setup_database(initiate_db=True, populate_data=True)
     logging.info("Starting the application")
     logging.info(f"app.state: {app.state.__dict__}")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
