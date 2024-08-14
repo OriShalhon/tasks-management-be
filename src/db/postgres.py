@@ -5,7 +5,7 @@ from typing import Union
 import psycopg2
 from fastapi import HTTPException
 
-from ..utils.singleton import Singleton
+MAX_RETRIES = 3
 
 
 class ValidateQuery():
@@ -47,7 +47,7 @@ class ValidateQuery():
                 raise HTTPException(status_code=400, detail="Invalid condition column")
 
 
-class PostgresDB(Singleton):
+class PostgresDB():
     def __init__(self):
         connection_string = os.getenv("DATABASE_URL")
         self.conn = psycopg2.connect(connection_string)
@@ -64,13 +64,44 @@ class PostgresDB(Singleton):
     def write_data(self, table_name: str, data_list: list[dict]) -> None:
         # Write new data to the specified table
         for data in data_list:
+            retries = 0
             columns_str = ", ".join(data.keys())
             values_str = ", ".join("%s" for _ in data.values())
+            self.__validate.validateQueryData(table_name, data.keys())
             query = f"INSERT INTO {table_name} ({columns_str}) VALUES ({values_str})"
-            self.cursor.execute(query, tuple(data.values()))
+            while retries < MAX_RETRIES:
+                try:
+                    self.cursor.execute(query, tuple(data.values()))
+                    break
+                except Exception as e:
+                    retries += 1
         self.conn.commit()
 
-    def get_data(self, table_name, columns, condition=None):
+    def delete_data(self, table_name: str, condition: tuple) -> None:
+        self.__validate.validateQueryData(table_name, [condition[0]])
+        query = f"DELETE FROM {table_name} WHERE {condition[0]} = %s"
+        params = (condition[1],)
+    
+        try:
+            self.cursor.execute(query, params)
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+    def update_data(self, table_name: str, data: dict, condition: tuple) -> None:
+        self.__validate.validateQueryData(table_name, list(data.keys()) + [condition[0]])
+
+        set_clause = ", ".join(f"{key} = %s" for key in data.keys())
+        where_clause = f"{condition[0]} = %s"
+        query = f"UPDATE {table_name} SET {set_clause} WHERE {where_clause}"
+        params = tuple(data.values()) + (condition[1],)
+
+        self.cursor.execute(query, params)
+        self.conn.commit()
+
+    def get_data(self, table_name, columns, condition=None, fetchall=True):
+        retries = 0
         self.__validate.validateQueryData(table_name, columns, condition)
         columns_str = ", ".join(columns)
         query = f"""SELECT {columns_str} FROM {table_name}"""
@@ -80,9 +111,17 @@ class PostgresDB(Singleton):
             query += f""" WHERE {condition[0]} = %s"""
             params = (condition[1],)
 
-        self.cursor.execute(query, params)
-
-        result = self.cursor.fetchall()
+        while retries < MAX_RETRIES:
+            try:
+                self.cursor.execute(query, params)
+                break
+            except Exception as e:
+                retries += 1
+        
+        if fetchall:
+            result = self.cursor.fetchall()
+        else:
+            result = self.cursor.fetchone()
         return result
 
     def initialize_db_structure(self):

@@ -28,7 +28,9 @@ This document outlines the architecture of our FastAPI-based application. Our pr
 │   ├── schemas/
 │   │   ├── board_schema.py
 │   │   ├── project_schema.py
-│   │   └── task_schema.py
+│   │   ├── task_schema.py
+│   │   ├── get_data_schema.py
+│   │   └── user.schema.py
 │   │
 │   ├── services/
 │   │   ├── board_service.py
