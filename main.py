@@ -33,16 +33,20 @@ def setup_database(initiate_db: bool = False, populate_data: bool = False) -> No
     if populate_data:
         db.populate_db_from_file(data_file)
 
+
 @app.get("/GetData")
-def get_data(data: Data, DB = Depends(get_DB)) -> dict:  
-    data = DB.get_data(data.table, data.column, 
-                       [data.condition_column, data.condition] 
-                       if data.condition else None)
+def get_data(data: Data, DB=Depends(get_DB)) -> dict:
+    data = DB.get_data(
+        data.table,
+        data.column,
+        [data.condition_column, data.condition] if data.condition else None,
+    )
     print(data)
     return {"data": data}
 
+
 @app.get("/getProjects")
-def getProjects(data: boardId, DB = Depends(get_DB)) -> Dict:
+def getProjects(data: boardId, DB=Depends(get_DB)) -> Dict:
     data = getBordsProjects(data, DB)
     return {"data": data}
 

@@ -1,5 +1,15 @@
 class task:
-    def __init__(self, id: int, name: str, status: str, description: str, start_time: str, attachment: str, blocking_task_id: int, project_id: int):
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        status: str,
+        description: str,
+        start_time: str,
+        attachment: str,
+        blocking_task_id: int,
+        project_id: int,
+    ):
         self.id = id
         self.name = name
         self.status = status
@@ -8,7 +18,6 @@ class task:
         self.attachment = attachment
         self.blocking_task_id = blocking_task_id
         self.project_id = project_id
-
 
     def to_dict(self) -> dict:
         """Converts the Task object to a dictionary.

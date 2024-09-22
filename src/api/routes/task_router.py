@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends
 
@@ -24,18 +24,24 @@ router = APIRouter(
 async def create_task_endpoint(task: TaskData, DB=Depends(get_DB)) -> TaskData:
     addTaskService(task, DB)
 
+
 @router.get("/getTask")
 async def get_task_endpoint(id: TaskId, DB=Depends(get_DB)) -> Dict:
     taskModel = getTaskService(id, DB)
     return taskModel.to_dict()
 
+
 @router.put("/updateTask")
-async def update_task_endpoint(id: TaskId, updated_task: TaskData, DB=Depends(get_DB)) -> Optional[TaskData]:
+async def update_task_endpoint(
+    id: TaskId, updated_task: TaskData, DB=Depends(get_DB)
+) -> Optional[TaskData]:
     return updateTaskService(id, updated_task, DB)
+
 
 @router.delete("/deleteTask")
 async def delete_task_endpoint(id: TaskId, DB=Depends(get_DB)) -> None:
     deleteTaskService(id, DB)
+
 
 """
 @router.get("/getProjectTasks")

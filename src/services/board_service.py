@@ -9,11 +9,13 @@ from src.schemas.board_schema import boardData, boardId
 def addBoardService(board: boardData, DB: PostgresDB) -> Board:
     addBoard(DB, board)
 
+
 def getBoardService(board_id: boardId, DB: PostgresDB) -> Optional[Board]:
     board_data = getBoard(board_id, DB)
     if board_data:
         return Board(**board_data)
     return None
+
 
 def getUserBoardsService(user_id: int, DB: PostgresDB) -> List[Board]:
     boards_data = getUserBoards(user_id, DB)

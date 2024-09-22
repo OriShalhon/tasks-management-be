@@ -16,17 +16,22 @@ def addProjectService(project: Project, DB: PostgresDB) -> Project:
     project_id = DB.get_last_inserted_id()
     return Project(project_id=project_id, **project.dict())
 
+
 def getProjectService(project_id: ProjectId, DB: PostgresDB) -> Optional[Project]:
     project_data = getProject(DB, project_id)
     if project_data:
         return Project(**project_data)
     return None
 
-def updateProjectService(project_id: int, project_data: Project, DB: PostgresDB) -> Optional[Project]:
+
+def updateProjectService(
+    project_id: int, project_data: Project, DB: PostgresDB
+) -> Optional[Project]:
     updated_project = updateProject(DB, project_id, project_data)
     if updated_project:
         return Project(**updated_project)
     return None
+
 
 def deleteProjectService(project_id: ProjectId, DB: PostgresDB) -> Optional[Project]:
     project_data = getProject(project_id, DB)

@@ -18,20 +18,24 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+
 @router.put("/signUp")
-def sign_up_endpoint(user: UserData, DB = Depends(get_DB)) -> None:
+def sign_up_endpoint(user: UserData, DB=Depends(get_DB)) -> None:
     signUpUserService(user, DB)
 
+
 @router.put("/updateUser")
-def update_user_endpoint(user_update: UserUpdate, DB = Depends(get_DB)) -> Dict[str, str]:
+def update_user_endpoint(user_update: UserUpdate, DB=Depends(get_DB)) -> Dict[str, str]:
     return getUserIdService(user_update, DB)
 
+
 @router.delete("/deleteUser")
-def delete_user_endpoint(user: UserData, DB = Depends(get_DB)) -> Dict[str, str]:
+def delete_user_endpoint(user: UserData, DB=Depends(get_DB)) -> Dict[str, str]:
     return deleteUserService(user, DB)
 
+
 @router.get("/getUserBoards")
-def get_user_boards_endpoint(user_id: boardId, DB = Depends(get_DB)) -> Dict:
+def get_user_boards_endpoint(user_id: boardId, DB=Depends(get_DB)) -> Dict:
     boards = getUserBoardsService(user_id, DB)
     if not boards:
         raise HTTPException(status_code=404, detail="No boards found for this user")
