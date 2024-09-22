@@ -1,13 +1,10 @@
 from typing import Dict
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from src.api.dependencies import get_DB
-from src.db.crud.boards_crud import addBoard, getBoard
-from src.db.models.project import getProjects
-
-from ...db.postgres import PostgresDB
-from ...schemas.board_schema import boardData, boardId
+from src.schemas.board_schema import boardData, boardId
+from src.services.board_service import addBoardService, getBoardService
 
 router = APIRouter(
     prefix="/board",
@@ -16,23 +13,21 @@ router = APIRouter(
 )
 
 @router.put("/addBoard")
-def add_board(board: boardData, DB = Depends(get_DB)) -> None:
-    data = addBoard(board, DB)
+def add_board_endpoint(board: boardData, DB = Depends(get_DB)) -> Dict:
+    data = addBoardService(board, DB)
     return {"data": data}
 
 
 @router.get("/getBoard")
-def get_board(board: boardId, DB = Depends(get_DB)) -> None:
-    data = getBoard(board, DB)
-    return {"data": data}
+def get_board_endpoint(board: boardId, DB = Depends(get_DB)) -> Dict:
+    board = getBoardService(board.id, DB)
+    if board is None:
+        raise HTTPException(status_code=404, detail="Board not found")
+    return {"data": board}
 
 """
-@router.get("/userBords")
-def get_bords(user: UserData, DB = Depends(get_DB)) -> Dict:
-    data = getUserBords(user, DB)
-    return {"data": data}
-"""
-
 def getBordsProjects(data: boardId, DB: PostgresDB) -> Dict:
     projects = getProjects(data, DB)
     return projects
+
+"""

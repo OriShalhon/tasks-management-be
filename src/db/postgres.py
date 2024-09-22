@@ -116,6 +116,8 @@ class PostgresDB():
                 self.cursor.execute(query, params)
                 break
             except Exception as e:
+                self.conn.rollback()
+                print(f"An error occurred: {e}")
                 retries += 1
         
         if fetchall:

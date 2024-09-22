@@ -7,7 +7,7 @@ from fastapi import Depends
 
 from src import create_app
 from src.api.dependencies import get_DB
-from src.api.routes import board_router, project_router, user_routes
+from src.api.routes import board_router, project_router, task_router, user_routes
 from src.api.routes.board_router import getBordsProjects
 from src.db.postgres import PostgresDB
 from src.schemas.board_schema import boardId
@@ -19,6 +19,7 @@ app = create_app()
 app.include_router(user_routes.router)
 app.include_router(board_router.router)
 app.include_router(project_router.router)
+app.include_router(task_router.router)
 # ----------------------------------------
 
 logging.basicConfig(level=logging.INFO)
@@ -49,4 +50,4 @@ def getProjects(data: boardId, DB = Depends(get_DB)) -> Dict:
 if __name__ == "__main__":
     logging.info("Starting the application")
     logging.info(f"app.state: {app.state.__dict__}")
-    uvicorn.run(app, host="127.0.0.1", port=8002)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

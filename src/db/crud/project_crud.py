@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from ...db.models.project_model import Project
 from ...schemas.project_schema import ProjectData, ProjectId
@@ -16,3 +16,11 @@ def getProject(project: ProjectId, DB: PostgresDB) -> Dict:
     project_dict = Project(*project_data[0])
 
     return project_dict
+
+def updateProject(DB: PostgresDB, project_id: int, project_data: ProjectData) -> Optional[Dict]:
+    update_data = {'name': project_data.name, 'visibility': project_data.visibility, 'board_id': project_data.board_id}
+    DB.update_data(TABLE_NAME, update_data, condition=('project_id', project_id))
+    return getProject(project_id, DB)
+
+def deleteProject(project_id: int, DB: PostgresDB) -> None:
+    DB.delete_data(TABLE_NAME, condition=('project_id', project_id))
