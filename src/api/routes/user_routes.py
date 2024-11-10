@@ -3,40 +3,49 @@ from typing import Dict
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.api.dependencies import get_DB
-from src.schemas.board_schema import boardId
 from src.schemas.users_schema import UserData, UserUpdate
 from src.services.board_service import getUserBoardsService
 from src.services.user_service import (
     deleteUserService,
     getUserIdService,
     signUpUserService,
+    updateUserService,
 )
 
+
 router = APIRouter(
-    prefix="/user",
-    tags=["user"],
+    prefix="/users",
+    tags=["users"],
     responses={404: {"description": "Not found"}},
 )
 
 
-@router.put("/signUp")
+@router.post("/")
 def sign_up_endpoint(user: UserData, DB=Depends(get_DB)) -> None:
     signUpUserService(user, DB)
 
 
-@router.put("/updateUser")
-def update_user_endpoint(user_update: UserUpdate, DB=Depends(get_DB)) -> Dict[str, str]:
-    return getUserIdService(user_update, DB)
+@router.put("/{id}")
+def update_user_endpoint(
+    id: int, user_update: UserUpdate, DB=Depends(get_DB)
+) -> Dict[str, str]:
+    return updateUserService(user_update, DB)
 
 
-@router.delete("/deleteUser")
+@router.delete("/{id}")
 def delete_user_endpoint(user: UserData, DB=Depends(get_DB)) -> Dict[str, str]:
     return deleteUserService(user, DB)
 
 
-@router.get("/getUserBoards")
-def get_user_boards_endpoint(user_id: boardId, DB=Depends(get_DB)) -> Dict:
-    boards = getUserBoardsService(user_id, DB)
+@router.get("/{id}")
+def get_user_endpoint(id: int, DB=Depends(get_DB)) -> Dict[str, str]:
+    getUserIdService(id, DB)
+
+
+# why is this in user routes rather than board routes?
+@router.get("/{id}")
+def get_user_boards_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
+    boards = getUserBoardsService(id, DB)
     if not boards:
         raise HTTPException(status_code=404, detail="No boards found for this user")
     return {"data": boards}

@@ -19,14 +19,14 @@ def addBoard(board: boardData, DB: PostgresDB) -> None:
     DB.write_data(TABLE_NAME, data_list)
 
 
-def getBoard(board: boardId, DB: PostgresDB) -> Dict:
+def getBoard(board_id: boardId, DB: PostgresDB) -> Dict:
     # Retrieve board data from the database
     board_data = DB.get_data(
         TABLE_NAME,
         columns=["board_id", "name", "icon", "visibility", "user_id"],
-        condition=("board_id", board.id),
+        condition=("board_id", board_id),
     )
-    board_dict = Board(*board_data[0])
+    board_dict = Board(**board_data[0])
 
     return board_dict
 
