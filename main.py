@@ -10,7 +10,6 @@ from src.api.dependencies import get_DB
 from src.api.routes import board_router, project_router, task_router, user_routes
 from src.api.routes.board_router import getBordsProjects
 from src.db.postgres import PostgresDB
-from src.schemas.board_schema import boardId
 from src.schemas.get_data_schema import Data
 
 app = create_app()
@@ -42,7 +41,7 @@ def get_data(data: Data, DB = Depends(get_DB)) -> dict:
     return {"data": data}
 
 @app.get("/getProjects")
-def getProjects(data: boardId, DB = Depends(get_DB)) -> Dict:
+def getProjects(data: int, DB = Depends(get_DB)) -> Dict:
     data = getBordsProjects(data, DB)
     return {"data": data}
 

@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from src.api.dependencies import (
     get_DB,  # Assuming this dependency fetches your database connection
 )
-from src.schemas.tasks_schema import TaskData, TaskId
+from src.schemas.tasks_schema import TaskData
 from src.services.task_service import (
     addTaskService,
     deleteTaskService,
@@ -14,27 +14,34 @@ from src.services.task_service import (
 )
 
 router = APIRouter(
-    prefix="/task",
-    tags=["task"],
+    prefix="/tasks",
+    tags=["tasks"],
     responses={404: {"description": "Not found"}},
 )
 
-
-@router.post("/createTask")
-async def create_task_endpoint(task: TaskData, DB=Depends(get_DB)) -> TaskData:
-    addTaskService(task, DB)
-
-@router.get("/getTask")
-async def get_task_endpoint(id: TaskId, DB=Depends(get_DB)) -> Dict:
+@router.get("/{id}")
+async def get_task_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
     taskModel = getTaskService(id, DB)
-    return taskModel.to_dict()
+    if not taskModel:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return taskModel
 
-@router.put("/updateTask")
-async def update_task_endpoint(id: TaskId, updated_task: TaskData, DB=Depends(get_DB)) -> Optional[TaskData]:
-    return updateTaskService(id, updated_task, DB)
+@router.post("/")
+async def create_task_endpoint(task: TaskData, DB=Depends(get_DB)) -> Dict:
+    taskModel = addTaskService(task, DB)
+    if not taskModel:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return taskModel
 
-@router.delete("/deleteTask")
-async def delete_task_endpoint(id: TaskId, DB=Depends(get_DB)) -> None:
+@router.put("/{id}")
+async def update_task_endpoint(id: int, updated_task: TaskData, DB=Depends(get_DB)) -> Optional[TaskData]:
+    taskModel = updateTaskService(id, updated_task, DB)
+    if not taskModel:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return taskModel
+
+@router.delete("/{id}")
+async def delete_task_endpoint(id: int, DB=Depends(get_DB)) -> None:
     deleteTaskService(id, DB)
 
 """

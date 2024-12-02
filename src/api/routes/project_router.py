@@ -3,39 +3,42 @@ from typing import Dict
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.api.dependencies import get_DB
-from src.db.crud.project_crud import addProject, getProject
 from src.services.project_service import (
     addProjectService,
     deleteProjectService,
     getProjectService,
+    updateProjectService,
 )
 
-from ...schemas.project_schema import ProjectData, ProjectId
+from ...schemas.project_schema import ProjectData
 
 router = APIRouter(
-    prefix="/project",
-    tags=["project"],
+    prefix="/projects",
+    tags=["projects"],
     responses={404: {"description": "Not found"}},
 )
 
-@router.put("/addProject")
+@router.post("/")
 def add_project_endpoint(project: ProjectData, DB = Depends(get_DB)) -> None:
     data = addProjectService(project, DB)
-    return {"data": data}
+    return data
 
-@router.get("/getProject")
-def get_project_endpoint(project: ProjectId, DB = Depends(get_DB)) -> Dict:
-    project = getProjectService(project.id, DB)
+@router.get("/{id}")
+def get_project_endpoint(id: int, DB = Depends(get_DB)) -> Dict:
+    project = getProjectService(id, DB)
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
-    return {"data": project}
+    return project
 
-@router.get("/deleteProject")
-def delete_project_endpoint(project: ProjectId, DB = Depends(get_DB)) -> Dict:
-    project = deleteProjectService(project.id, DB)
-    if project is None:
+@router.put("/{id}")
+def update_project_endpoint(id: int, project: ProjectData, DB = Depends(get_DB)) -> None:
+    updated_project = updateProjectService(id, project, DB)
+    if updated_project is None:
         raise HTTPException(status_code=404, detail="Project not found")
-    return {"data": project}
+
+@router.delete("/")
+def delete_project_endpoint(id: int, DB = Depends(get_DB)) -> None:
+    deleteProjectService(id, DB)
 
 
 
