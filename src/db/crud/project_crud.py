@@ -33,6 +33,7 @@ def updateProject(DB: PostgresDB, project_id: int, project_data: ProjectData) ->
     DB.update_data(TABLE_NAME, update_data, condition=('project_id', project_id))
     return getProject(project_id, DB)
 
+
 def deleteProject(project_id: int, DB: PostgresDB) -> None:
     DB.delete_data(TABLE_NAME, condition=('project_id', project_id))
 

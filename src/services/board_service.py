@@ -16,6 +16,7 @@ def getBoardService(board_id: int, DB: PostgresDB) -> Optional[Board]:
         return convert_tuple_to_model(Board, board_data[0]).model_dump()
     return None
 
+
 def getUserBoardsService(user_id: int, DB: PostgresDB) -> List[Board]:
     boards_data = getUserBoards(user_id, DB)
     return [Board(**board.dict()) for board in boards_data]

@@ -1,11 +1,12 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from src.db.models.task_model import TaskModel
 from src.schemas.tasks_schema import TaskData
 
 from ..postgres import PostgresDB
 
-TABLE_NAME = 'tasks'
+TABLE_NAME = "tasks"
+
 
 def addTask(data: TaskData, DB: PostgresDB) -> None:
     data_list = [{'name':data.name, 'status':data.status, 'description':data.description, 'start_time':data.start_time,
@@ -37,4 +38,4 @@ def getProjectTasks(project_id: int, DB: PostgresDB) -> List[TaskModel]:
     return [TaskModel(*task_data) for task_data in tasks_data]
 
 def deleteTasks(project_id: int, DB: PostgresDB) -> None:
-    DB.delete_data(TABLE_NAME, condition=('project_id', project_id))
+    DB.delete_data(TABLE_NAME, condition=("project_id", project_id))

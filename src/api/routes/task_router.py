@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -43,6 +43,7 @@ async def update_task_endpoint(id: int, updated_task: TaskData, DB=Depends(get_D
 @router.delete("/{id}")
 async def delete_task_endpoint(id: int, DB=Depends(get_DB)) -> None:
     deleteTaskService(id, DB)
+
 
 """
 @router.get("/getProjectTasks")
