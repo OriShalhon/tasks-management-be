@@ -19,12 +19,14 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+
 @router.get("/{id}")
 async def get_task_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
     taskModel = getTaskService(id, DB)
     if not taskModel:
         raise HTTPException(status_code=404, detail="Task not found")
     return taskModel
+
 
 @router.post("/")
 async def create_task_endpoint(task: TaskData, DB=Depends(get_DB)) -> Dict:
@@ -33,12 +35,16 @@ async def create_task_endpoint(task: TaskData, DB=Depends(get_DB)) -> Dict:
         raise HTTPException(status_code=404, detail="Task not found")
     return taskModel
 
+
 @router.put("/{id}")
-async def update_task_endpoint(id: int, updated_task: TaskData, DB=Depends(get_DB)) -> Optional[TaskData]:
+async def update_task_endpoint(
+    id: int, updated_task: TaskData, DB=Depends(get_DB)
+) -> Optional[TaskData]:
     taskModel = updateTaskService(id, updated_task, DB)
     if not taskModel:
         raise HTTPException(status_code=404, detail="Task not found")
     return taskModel
+
 
 @router.delete("/{id}")
 async def delete_task_endpoint(id: int, DB=Depends(get_DB)) -> None:

@@ -45,7 +45,7 @@ def get_data(data: Data, DB=Depends(get_DB)) -> dict:
 
 
 @app.get("/getProjects")
-def getProjects(data: int, DB = Depends(get_DB)) -> Dict:
+def getProjects(data: int, DB=Depends(get_DB)) -> Dict:
     data = getBordsProjects(data, DB)
     return {"data": data}
 

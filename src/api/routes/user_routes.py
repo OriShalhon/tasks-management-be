@@ -34,7 +34,7 @@ def delete_user_endpoint(user: UserData, DB=Depends(get_DB)) -> Dict[str, str]:
 
 
 @router.get("/getUserBoards")
-def get_user_boards_endpoint(user_id: int, DB = Depends(get_DB)) -> Dict:
+def get_user_boards_endpoint(user_id: int, DB=Depends(get_DB)) -> Dict:
     boards = getUserBoardsService(user_id, DB)
     if not boards:
         raise HTTPException(status_code=404, detail="No boards found for this user")

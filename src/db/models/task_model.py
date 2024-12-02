@@ -4,11 +4,11 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class TaskModel(BaseModel): 
-    id: int 
-    name: str 
-    status: str 
-    description: str 
+class TaskModel(BaseModel):
+    id: int
+    name: str
+    status: str
+    description: str
     start_time: datetime
-    attachment: str 
+    attachment: str
     blocking_task_id: Optional[int] = None

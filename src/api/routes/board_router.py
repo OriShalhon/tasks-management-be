@@ -12,19 +12,21 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+
 @router.post("/")
-def add_board_endpoint(board: boardData, DB = Depends(get_DB)) -> Dict:
+def add_board_endpoint(board: boardData, DB=Depends(get_DB)) -> Dict:
     data = addBoardService(board, DB)
     return {"data": data}
 
 
 @router.get("/{id}")
-def get_board_endpoint(id: int, DB = Depends(get_DB)) -> Dict:
+def get_board_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
     board = getBoardService(id, DB)
     if board is None:
         raise HTTPException(status_code=404, detail="Board not found")
     return {"data": board}
 
-def getBordsProjects(data: int, DB = Depends(get_DB)) -> Dict:
-    #projects = getProjects(data, DB)
+
+def getBordsProjects(data: int, DB=Depends(get_DB)) -> Dict:
+    # projects = getProjects(data, DB)
     return None

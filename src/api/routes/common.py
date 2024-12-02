@@ -1,4 +1,3 @@
-from typing import Dict
 
 """
 from ...db.models.boards_model import getBords

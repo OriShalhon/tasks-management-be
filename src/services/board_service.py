@@ -10,6 +10,7 @@ from src.utils.utils import convert_tuple_to_model
 def addBoardService(board: boardData, DB: PostgresDB) -> Board:
     addBoard(board, DB)
 
+
 def getBoardService(board_id: int, DB: PostgresDB) -> Optional[Board]:
     board_data = getBoard(board_id, DB)
     if board_data:

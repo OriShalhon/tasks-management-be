@@ -8,7 +8,7 @@ from fastapi import HTTPException
 MAX_RETRIES = 3
 
 
-class ValidateQuery():
+class ValidateQuery:
     def __init__(self, postgresDB):
         self.allowed_tables = []
         self.allowed_columns = {}
@@ -23,11 +23,13 @@ class ValidateQuery():
         for row in result:
             table_name = row[0]
             columns = row[1]
-            columns.append('*')
+            columns.append("*")
             self.allowed_tables.append(row[0])
             self.allowed_columns[table_name] = columns
 
-    def validateQueryData(self, table_name: str, columns: Union[str, list[str]], condition=None):
+    def validateQueryData(
+        self, table_name: str, columns: Union[str, list[str]], condition=None
+    ):
         # Ensure columns is always a list
         if isinstance(columns, str):
             columns = [columns]
@@ -47,7 +49,7 @@ class ValidateQuery():
                 raise HTTPException(status_code=400, detail="Invalid condition column")
 
 
-class PostgresDB():
+class PostgresDB:
     def __init__(self):
         connection_string = os.getenv("DATABASE_URL")
         self.conn = psycopg2.connect(connection_string)
@@ -84,7 +86,7 @@ class PostgresDB():
         self.__validate.validateQueryData(table_name, [condition[0]])
         query = f"DELETE FROM {table_name} WHERE {condition[0]} = %s"
         params = (condition[1],)
-    
+
         try:
             self.cursor.execute(query, params)
             self.conn.commit()
@@ -93,7 +95,9 @@ class PostgresDB():
             raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
     def update_data(self, table_name: str, data: dict, condition: tuple) -> None:
-        self.__validate.validateQueryData(table_name, list(data.keys()) + [condition[0]])
+        self.__validate.validateQueryData(
+            table_name, list(data.keys()) + [condition[0]]
+        )
 
         set_clause = ", ".join(f"{key} = %s" for key in data.keys())
         where_clause = f"{condition[0]} = %s"
@@ -122,15 +126,15 @@ class PostgresDB():
                 self.conn.rollback()
                 print(f"An error occurred: {e}")
                 retries += 1
-        
+
         if fetchall:
             result = self.cursor.fetchall()
         else:
             result = self.cursor.fetchone()
         return result
-    
+
     def get_last_inserted_id(self) -> int:
-        self.cursor.execute("SELECT LASTVAL()") 
+        self.cursor.execute("SELECT LASTVAL()")
         return self.cursor.fetchone()[0]
 
     def initialize_db_structure(self):

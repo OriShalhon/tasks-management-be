@@ -12,5 +12,3 @@ class TaskData(BaseModel):
     attachment: Optional[str] = None
     blocking_task_id: Optional[int] = None
     project_id: int
-    
-    

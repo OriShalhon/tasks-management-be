@@ -6,4 +6,3 @@ class boardData(BaseModel):
     icon: str
     visibility: bool
     user_id: int
-    

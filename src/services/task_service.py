@@ -20,11 +20,15 @@ def addTaskService(task: TaskData, DB: PostgresDB) -> TaskModel:
         return convert_tuple_to_model(TaskModel, taskData[0]).model_dump()
     return None
 
-def updateTaskService(id: int, task_data: TaskData, DB: PostgresDB) -> Optional[TaskData]:
+
+def updateTaskService(
+    id: int, task_data: TaskData, DB: PostgresDB
+) -> Optional[TaskData]:
     updated_task = updateTask(id, task_data, DB)
     if updated_task:
-         return convert_tuple_to_model(TaskModel, updated_task[0]).model_dump()
+        return convert_tuple_to_model(TaskModel, updated_task[0]).model_dump()
     return None
+
 
 def deleteTaskService(id: int, DB: PostgresDB) -> None:
     deleteTask(id, DB)
