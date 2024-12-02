@@ -1,4 +1,3 @@
-
 """
 from ...db.models.boards_model import getBords
 from ...db.models.BU_user import getUserId
