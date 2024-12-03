@@ -1,16 +1,11 @@
 import logging
 import os
-from typing import Dict
 
 import uvicorn
-from fastapi import Depends
 
 from src import create_app
-from src.api.dependencies import get_DB
 from src.api.routes import board_router, project_router, task_router, user_routes
-from src.api.routes.board_router import getBordsProjects
 from src.db.postgres import PostgresDB
-from src.schemas.get_data_schema import Data
 
 app = create_app()
 
