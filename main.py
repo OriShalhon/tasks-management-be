@@ -33,23 +33,6 @@ def setup_database(initiate_db: bool = False, populate_data: bool = False) -> No
         db.populate_db_from_file(data_file)
 
 
-@app.get("/GetData")
-def get_data(data: Data, DB=Depends(get_DB)) -> dict:
-    data = DB.get_data(
-        data.table,
-        data.column,
-        [data.condition_column, data.condition] if data.condition else None,
-    )
-    print(data)
-    return {"data": data}
-
-
-@app.get("/getProjects")
-def getProjects(data: int, DB=Depends(get_DB)) -> Dict:
-    data = getBordsProjects(data, DB)
-    return {"data": data}
-
-
 if __name__ == "__main__":
     logging.info("Starting the application")
     logging.info(f"app.state: {app.state.__dict__}")

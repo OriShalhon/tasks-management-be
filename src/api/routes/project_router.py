@@ -28,7 +28,7 @@ def add_project_endpoint(project: ProjectData, DB=Depends(get_DB)) -> None:
 @router.get("/{id}")
 def get_project_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
     project = getProjectService(id, DB)
-    if project is None:
+    if not project:
         raise HTTPException(status_code=404, detail="Project not found")
     return project
 
@@ -36,7 +36,7 @@ def get_project_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
 @router.put("/{id}")
 def update_project_endpoint(id: int, project: ProjectData, DB=Depends(get_DB)) -> None:
     updated_project = updateProjectService(id, project, DB)
-    if updated_project is None:
+    if not updated_project:
         raise HTTPException(status_code=404, detail="Project not found")
 
 

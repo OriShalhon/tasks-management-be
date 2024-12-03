@@ -22,7 +22,7 @@ def add_board_endpoint(board: boardData, DB=Depends(get_DB)) -> Dict:
 @router.get("/{id}")
 def get_board_endpoint(id: int, DB=Depends(get_DB)) -> Dict:
     board = getBoardService(id, DB)
-    if board is None:
+    if not board:
         raise HTTPException(status_code=404, detail="Board not found")
     return {"data": board}
 
