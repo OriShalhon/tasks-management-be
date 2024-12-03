@@ -1,10 +1,6 @@
 from pydantic import BaseModel
 
 
-class boardId(BaseModel):
-    id: int
-
-
 class boardData(BaseModel):
     name: str
     icon: str

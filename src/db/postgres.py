@@ -76,8 +76,11 @@ class PostgresDB:
                     self.cursor.execute(query, tuple(data.values()))
                     break
                 except Exception as e:
+                    self.conn.rollback()
+                    print(f"An error occurred: {e}")
                     retries += 1
         self.conn.commit()
+        return self.get_last_inserted_id()
 
     def delete_data(self, table_name: str, condition: tuple) -> None:
         self.__validate.validateQueryData(table_name, [condition[0]])
@@ -129,6 +132,10 @@ class PostgresDB:
         else:
             result = self.cursor.fetchone()
         return result
+
+    def get_last_inserted_id(self) -> int:
+        self.cursor.execute("SELECT LASTVAL()")
+        return self.cursor.fetchone()[0]
 
     def initialize_db_structure(self):
         # Define the structure of the tables

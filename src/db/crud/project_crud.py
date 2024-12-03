@@ -1,33 +1,41 @@
+"""
+This module contains CRUD (Create, Read, Update, Delete) operations for managing projects in the database.
+
+It provides functions to add, retrieve, update, and delete project data using a PostgreSQL database.
+The module interacts with the 'projects' table in the database.
+
+Functions:
+    addProject: Add a new project to the database.
+    getProject: Retrieve project data from the database.
+    updateProject: Update an existing project in the database.
+    deleteProject: Delete a project from the database.
+
+Each function takes a PostgresDB object as a parameter to perform database operations.
+"""
+
 from typing import Dict, Optional
 
-from ...db.models.project_model import Project
-from ...schemas.project_schema import ProjectData, ProjectId
+from ...schemas.project_schema import ProjectData
 from ..postgres import PostgresDB
 
 TABLE_NAME = "projects"
 
 
-def addProject(project: ProjectData, DB: PostgresDB) -> None:
-    data_list = [
-        {
-            "name": project.name,
-            "visibility": project.visibility,
-            "board_id": project.board_id,
-        }
-    ]
-    DB.write_data(TABLE_NAME, data_list)
-
-
-def getProject(project: ProjectId, DB: PostgresDB) -> Dict:
+def getProject(id: int, DB: PostgresDB) -> Dict:
     # Retrieve board data from the database
     project_data = DB.get_data(
         TABLE_NAME,
         columns=["project_id", "name", "visibility", "board_id"],
-        condition=("project_id", project.id),
+        condition=("project_id", id),
     )
-    project_dict = Project(*project_data[0])
+    return project_data
 
-    return project_dict
+
+def addProject(data: ProjectData, DB: PostgresDB) -> None:
+    data_list = [
+        {"name": data.name, "visibility": data.visibility, "board_id": data.board_id}
+    ]
+    return DB.write_data(TABLE_NAME, data_list)
 
 
 def updateProject(

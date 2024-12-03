@@ -3,7 +3,6 @@ from typing import Dict
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.api.dependencies import get_DB
-from src.schemas.board_schema import boardId
 from src.schemas.users_schema import UserData, UserUpdate
 from src.services.board_service import getUserBoardsService
 from src.services.user_service import (
@@ -35,7 +34,7 @@ def delete_user_endpoint(user: UserData, DB=Depends(get_DB)) -> Dict[str, str]:
 
 
 @router.get("/getUserBoards")
-def get_user_boards_endpoint(user_id: boardId, DB=Depends(get_DB)) -> Dict:
+def get_user_boards_endpoint(user_id: int, DB=Depends(get_DB)) -> Dict:
     boards = getUserBoardsService(user_id, DB)
     if not boards:
         raise HTTPException(status_code=404, detail="No boards found for this user")

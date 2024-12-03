@@ -1,7 +1,7 @@
 from typing import List, Optional
 
-from src.db.models.task_model import task
-from src.schemas.tasks_schema import TaskData, TaskId
+from src.db.models.task_model import TaskModel
+from src.schemas.tasks_schema import TaskData
 
 from ..postgres import PostgresDB
 
@@ -20,10 +20,12 @@ def addTask(data: TaskData, DB: PostgresDB) -> None:
             "project_id": data.project_id,
         }
     ]
-    DB.write_data(TABLE_NAME, data_list)
+    id = DB.write_data(TABLE_NAME, data_list)
+    taskData = getTask(id, DB)
+    return taskData
 
 
-def getTask(data: TaskId, DB: PostgresDB) -> task:
+def getTask(data: int, DB: PostgresDB) -> TaskModel:
     # Retrieve board data from the database
     task_data = DB.get_data(
         TABLE_NAME,
@@ -37,12 +39,12 @@ def getTask(data: TaskId, DB: PostgresDB) -> task:
             "blocking_task_id",
             "project_id",
         ],
-        condition=("task_id", str(data.id)),
+        condition=("task_id", str(data)),
     )
-    return task(*task_data[0])
+    return task_data
 
 
-def updateTask(id: TaskId, data: TaskData, DB: PostgresDB) -> Optional[TaskData]:
+def updateTask(id: int, data: TaskData, DB: PostgresDB) -> Optional[TaskData]:
     update_data = {
         "name": data.name,
         "status": data.status,
@@ -57,11 +59,11 @@ def updateTask(id: TaskId, data: TaskData, DB: PostgresDB) -> Optional[TaskData]
     return updateData
 
 
-def deleteTask(id: TaskId, DB: PostgresDB) -> None:
+def deleteTask(id: int, DB: PostgresDB) -> None:
     DB.delete_data(TABLE_NAME, condition=("task_id", str(id.id)))
 
 
-def getProjectTasks(project_id: int, DB: PostgresDB) -> List[task]:
+def getProjectTasks(project_id: int, DB: PostgresDB) -> List[TaskModel]:
     tasks_data = DB.get_data(
         TABLE_NAME,
         columns=[
@@ -76,7 +78,7 @@ def getProjectTasks(project_id: int, DB: PostgresDB) -> List[task]:
         ],
         condition=("project_id", str(project_id.id)),
     )
-    return [task(*task_data) for task_data in tasks_data]
+    return [TaskModel(*task_data) for task_data in tasks_data]
 
 
 def deleteTasks(project_id: int, DB: PostgresDB) -> None:

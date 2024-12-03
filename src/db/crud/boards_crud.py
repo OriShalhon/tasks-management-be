@@ -1,7 +1,6 @@
 from typing import Dict, List
 
-from ...db.models.boards_model import Board
-from ...schemas.board_schema import boardData, boardId
+from ...schemas.board_schema import boardData
 from ..postgres import PostgresDB
 
 TABLE_NAME = "boards"
@@ -19,16 +18,14 @@ def addBoard(board: boardData, DB: PostgresDB) -> None:
     DB.write_data(TABLE_NAME, data_list)
 
 
-def getBoard(board: boardId, DB: PostgresDB) -> Dict:
+def getBoard(board: int, DB: PostgresDB) -> Dict:
     # Retrieve board data from the database
     board_data = DB.get_data(
         TABLE_NAME,
         columns=["board_id", "name", "icon", "visibility", "user_id"],
-        condition=("board_id", board.id),
+        condition=("board_id", board),
     )
-    board_dict = Board(*board_data[0])
-
-    return board_dict
+    return board_data
 
 
 def getUserBoards(user_id: int, DB: PostgresDB) -> List[Dict]:
@@ -37,4 +34,4 @@ def getUserBoards(user_id: int, DB: PostgresDB) -> List[Dict]:
         columns=["board_id", "name", "icon", "visibility", "user_id"],
         condition=("user_id", user_id),
     )
-    return [Board(*board_data) for board_data in boards_data]
+    # return [Board(*board_data) for board_data in boards_data]
